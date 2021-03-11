@@ -12,6 +12,7 @@ import {
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 
@@ -19,50 +20,19 @@ import LoginScreen from './components/LoginScreen';
 import RegistrationScreen from './components/RegistrationScreen';
 import DashBoard from './components/DashBoard';
 import AddFeedback from './components/AddFeedback'
-import AfterLoginContainer from './components/AfterLoginContainer';
 
 import {AuthContext} from './components/Context'
 
-const Stack = createStackNavigator();
+import { loginReducer, initialLoginState } from './Redux/Reducer'
 
-const Tab = createBottomTabNavigator(); 
+
 
 const App = () => {
 
-  // const [isSignedIn, setSignedIn] = useState(false);
-  // const [userToken, setUserToken] = useState(null)
+  const Stack = createStackNavigator();
 
-  const initialLoginState = {
-    isLogin : false,
-    userName : null,
-    userToken : null
-  }
+  const Tab = createBottomTabNavigator(); 
 
-  const loginReducer = (prevState, action) => {
-    switch(action.type) {
-      case 'RETRIVE_TOKEN' : return {
-        ...prevState,
-        userToken: action.Token,
-        isLogin: true
-      };
-      case 'LOGIN' : return {
-        ...prevState,
-        userName: action.userName,
-        userToken: action.token,
-        isLogin: true
-      };
-      case 'LOGOUT' : return {
-        ...prevState,
-        isLogin: false
-      };
-      case 'REGISTER' : return {
-        ...prevState,
-        userName: action.userName,
-        userToken: action.token,
-        isLogin: true
-      };
-    }
-  }
 
   const [loginState, dispatch] = useReducer(loginReducer,initialLoginState);
 
@@ -90,15 +60,10 @@ const App = () => {
 
   }),[])
 
-  useEffect(() => {
-    //dispatch({type: 'RETRIVE_TOKEN', userToken: 'xyz'})
-  },[])
-
   return (
 
     <AuthContext.Provider value={authContext}>
 
-    
       <NavigationContainer >
          
            {
@@ -106,27 +71,33 @@ const App = () => {
               <Tab.Navigator 
               tabBarOptions={{
                 style:{
-                  paddingBottom:10,
+                  paddingBottom:27,
+                  height: 75
                 },
                 labelStyle: {
                   fontSize:18
                 }
-              }}
+              } }
               >
-              <Tab.Screen name="Dashboard" component={DashBoard} options={
+
+              {/* <Drawer.Navigator initialRouteName="Dashboard">
+                <Drawer.Screen name="Dashboard" component={DashBoard} />
+                <Drawer.Screen name="AddFeedback" component={AddFeedback} />
+              </Drawer.Navigator> */}
+
+              <Tab.Screen name="Dashboard" children={()=><DashBoard />} options={
                 StyleSheet.create({fontSize:20})
               }></Tab.Screen>
               <Tab.Screen name="AddFeedback" component={AddFeedback}></Tab.Screen>
-              </Tab.Navigator>
-             ) : (
-               <Stack.Navigator  headerMode={false}>
-              <Stack.Screen name="Login" component={LoginScreen} ></Stack.Screen>
-              <Stack.Screen name="SignUp" component={RegistrationScreen}></Stack.Screen>
+               </Tab.Navigator>
+              ) : (
+              <Stack.Navigator  headerMode={false}>
+                <Stack.Screen name="Login" component={LoginScreen} ></Stack.Screen>
+                <Stack.Screen name="SignUp" component={RegistrationScreen}></Stack.Screen>
               </Stack.Navigator>
              )
            }
-          
-          {/* <Stack.Screen name="AfterLogin" component={AfterLoginContainer}></Stack.Screen> */}
+
           
 
         
@@ -142,8 +113,6 @@ const App = () => {
      </NavigationContainer> 
 
     </AuthContext.Provider>
-
-    // <DashBoard />
       
   );
 };

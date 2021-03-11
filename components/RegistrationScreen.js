@@ -31,6 +31,7 @@ const RegistrationScreen = ({navigation}) => {
         const [passErrMsg, setPassErrMsg] = useState(null);
         const [nameError, setNameError] = useState(false);
         const [PassError, setPassError] = useState(false);
+        const [imageMsg, setImageMsg] = useState(null);
 
         const { SignUp } = useContext(AuthContext);
 
@@ -121,8 +122,19 @@ const RegistrationScreen = ({navigation}) => {
             SignUp(userName,password)
             // navigation.push('Dashboard',photo)
         }else {
-            alert('Enter Valid Details')
+            if(nameError || userName == null) {
+                setNameErrMsg('Name Required');
+                setNameError(true);
+            }
+            if(PassError || password==null) {
+                setPassErrMsg('Password Required');
+                setPassError(true)
+            }
+            if(photo == null) {
+                setImageMsg('Image Required');
+            }
         }
+
     }
 
     const checkUserNamePresent = (val) => {
@@ -170,9 +182,9 @@ const RegistrationScreen = ({navigation}) => {
                                         
                         <Text style={{fontSize:30, color:'white'}}>Username</Text>
 
-                        { nameError &&
+                        {/* { nameError &&
                             <Text style={{alignSelf:'center',marginRight:10,color:'red',fontSize:15}}>{nameErrMsg}</Text>
-                        }
+                        } */}
                     </View>
 
                     <TextInput
@@ -182,14 +194,18 @@ const RegistrationScreen = ({navigation}) => {
                     onEndEditing = {e => checkUserNamePresent(e.nativeEvent.text)}
                     value={userName}
                     />
+                    { nameError ?
+                        <Text style={{marginLeft:10,color:'red',fontSize:15}}>{nameErrMsg}</Text>
+                        : <Text></Text>
+                    }
 
                     <View style={{flexDirection: 'row',justifyContent:'space-between'}}>
 
                         <Text style={{fontSize:30, marginTop:15,color:'white'}}>Password</Text>
 
-                    {   PassError &&
+                    {/* {   PassError &&
                         <Text style={{alignSelf:'center',marginRight:10,color:'red',fontSize:15, marginTop:15 }}>{passErrMsg}</Text>
-                    }
+                    } */}
 
                     </View>
                     <TextInput
@@ -200,6 +216,10 @@ const RegistrationScreen = ({navigation}) => {
                         value = {password}
                         secureTextEntry
                     />
+                    {   PassError ?
+                        <Text style={{marginLeft:10,color:'red',fontSize:15}}>{passErrMsg}</Text>
+                        : <Text> </Text>
+                    }
 
                     <TouchableOpacity 
                     style={styles.pickImage}
@@ -209,6 +229,11 @@ const RegistrationScreen = ({navigation}) => {
                             Pick Profile Image
                         </Text>
                     </TouchableOpacity>
+                    {
+                        photo==null ? 
+                        <Text style={{marginLeft:10,color:'red',fontSize:15}}>{imageMsg}</Text>
+                        : <Text></Text>
+                    }
                               
 
                     <TouchableOpacity style={styles.submitButton}

@@ -4,7 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import RegistrationScreen from './RegistrationScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
+import { Action } from '../Redux/Action'
 import { AuthContext } from './Context'
 
 const LoginScreen = ({navigation}) => {
@@ -102,7 +102,14 @@ const LoginScreen = ({navigation}) => {
             SignIn(userName,password)
             // navigation.navigate('Dashboard')
         }else {
-            alert('Enter Valid Details')
+            if(nameError || userName == null) {
+                setNameErrMsg('Name Required');
+                setNameError(true);
+            }
+            if(PassError || password==null) {
+                setPassErrMsg('Password Required');
+                setPassError(true)
+            }
         }
     }
 
@@ -141,9 +148,9 @@ const LoginScreen = ({navigation}) => {
                     
                     <Text style={{fontSize:30, color:'white'}}>Username</Text>
 
-                    { nameError &&
+                    {/* { nameError &&
                         <Text style={{alignSelf:'center',marginRight:10,color:'red',fontSize:15}}>{nameErrMsg}</Text>
-                    }
+                    } */}
                     </View>
 
                     <TextInput
@@ -153,14 +160,18 @@ const LoginScreen = ({navigation}) => {
                     onEndEditing = {e => checkUserNamePresent(e.nativeEvent.text)}
                     value={userName}
                     />
+                    { nameError ?
+                        <Text style={{marginLeft:10,color:'red',fontSize:15}}>{nameErrMsg}</Text>
+                        : <Text></Text>
+                    }
 
                     <View style={{flexDirection: 'row',justifyContent:'space-between'}}>
 
                         <Text style={{fontSize:30, marginTop:15,color:'white'}}>Password</Text>
 
-                    {   PassError &&
+                    {/* {   PassError &&
                         <Text style={{alignSelf:'center',marginRight:10,color:'red',fontSize:15, marginTop:15 }}>{passErrMsg}</Text>
-                    }
+                    } */}
 
                     </View>
                     <TextInput
@@ -171,6 +182,10 @@ const LoginScreen = ({navigation}) => {
                         value = {password}
                         secureTextEntry
                     />
+                    {   PassError ?
+                        <Text style={{marginLeft:10,color:'red',fontSize:15}}>{passErrMsg}</Text>
+                        : <Text> </Text>
+                    }
         
                     <TouchableOpacity style={styles.submitButton}
                     onPress={()=>handleSubmit()}

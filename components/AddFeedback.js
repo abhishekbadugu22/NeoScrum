@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useContext } from 'react';
-import { ScrollView, StyleSheet , View,Text, Image, TouchableHighlight} from 'react-native';
+import { ScrollView, StyleSheet , View,Text, Image, TouchableHighlight, Button} from 'react-native';
+
+import  axios  from 'axios';
 
 import AddFeedbackPost from './AddFeedbackPost';
 
@@ -8,34 +10,27 @@ import { AuthContext } from './Context'
 
 const AddFeedback = () => {
 
-    const { SignOut } = useContext(AuthContext)
+    const { SignOut } = useContext(AuthContext);
+    const [feedbackPost, setFeedbackPost] = useState([])
 
-    const addFeedback = [
-        {
-            id: 1,
-            userName: 'Abhishek',
-            profileUri: '../assets/profilePic.jpeg',
-        },
-        {
-            id: 2,
-            userName: 'Akash',
-            profileUri: '../assets/profilePic.jpeg',
-        },
-        {
-            id: 3,
-            userName: 'Ashish',
-            profileUri: '../assets/profilePic.jpeg',
-        },
-        {
-            id: 4,
-            userName: 'Bruce',
-            profileUri: '../assets/profilePic.jpeg',
-        },
-    ]
+    const fetchFeedBackPosts = () => {
+        axios.get('https://jsonplaceholder.typicode.com/users')
+        .then((response) => {
+            return response.data
+        })
+        .then(data => (
+                setFeedbackPost(data)
+        ))
+    }
+
+    useEffect(() => {
+        fetchFeedBackPosts()
+    },[])
+    
 
     return (
-        <ScrollView>
-            <View style={styles.header}>
+        <ScrollView style={styles.container}>
+            <View style={styles.header} elevation={10}>
                 <View style={{margin:10 , justifyContent:'space-between', flexDirection:'row'}}>
 
                     {/* ProfileImage and User Name */}
@@ -51,12 +46,17 @@ const AddFeedback = () => {
                     {/* Logout and Feedback Button */}
 
                     <View style={styles.headerRight}>
-                        <TouchableHighlight 
+                        {/* <TouchableHighlight 
                         style={styles.logoutButton}
                         onPress={() => SignOut()}
                         >
                             <Text style={{fontSize:16, color:'white'}}>Logout</Text>
-                        </TouchableHighlight>
+                        </TouchableHighlight> */}
+                        <Button 
+                        title="Logout"
+                        color="tomato"
+                        onPress={() => SignOut()}
+                        />
                     </View>
                 </View>
             </View>
@@ -67,7 +67,7 @@ const AddFeedback = () => {
                 <Text style={{fontSize:25, textAlign:'center', marginBottom:20}}>Add Feedback</Text>
 
                 <View>
-                    <AddFeedbackPost addFeedback={addFeedback} />
+                    <AddFeedbackPost feedbackPost={feedbackPost} />
                 </View>
 
                 
@@ -79,16 +79,23 @@ const AddFeedback = () => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
+        backgroundColor: 'white'
     },
     //Header
     header: {
         width:"100%",
         height:100,
-        backgroundColor: 'lightblue',
+        backgroundColor: 'white',
         justifyContent:'center',
-        borderBottomColor:'dodgerblue',
-        borderBottomWidth: 2,
+        borderColor:'black',
+        shadowColor: "#000000",
+        shadowOpacity: 0.8,
+        shadowRadius: 2,
+        shadowOffset: {
+        height: 1,
+        width: 1
+        }
     },
     profileImg : {
         width: 60,
