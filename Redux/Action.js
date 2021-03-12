@@ -17,7 +17,7 @@ export const Action = () => {
       if(userName != '' && password != '') {
         userToken: 'abcd'
       }
-      dispatch({type: 'LOGIN', userName: userName, userToken: userToken})
+      dispatch({type: 'LOGIN', userName: userName, userToken: userToken});
     },
     SignOut: () => {
       dispatch({type: 'LOGOUT'})
@@ -32,4 +32,6 @@ export const Action = () => {
     }
 
   }),[])
+
+  return authContext
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useContext } from 'react';
-import { ScrollView, StyleSheet , View,Text, Image, TouchableHighlight, Button} from 'react-native';
+import { ScrollView, StyleSheet , View,Text, Image, TouchableHighlight, Button, ActivityIndicator} from 'react-native';
 
 import  axios  from 'axios';
 
@@ -8,19 +8,27 @@ import AddFeedbackPost from './AddFeedbackPost';
 
 import { AuthContext } from './Context'
 
-const AddFeedback = () => {
+const AddFeedback = ({ userLoginState }) => {
 
     const { SignOut } = useContext(AuthContext);
-    const [feedbackPost, setFeedbackPost] = useState([])
+    const [feedbackPost, setFeedbackPost] = useState([]);
+    const [isLoading, setIsloading] = useState(true)
+
+    /**
+     * @description Fetches data of people whoses feedback has to be given
+     * @author Abhishek Badugu
+     */
 
     const fetchFeedBackPosts = () => {
         axios.get('https://jsonplaceholder.typicode.com/users')
         .then((response) => {
-            return response.data
+            setFeedbackPost(response.data)
+            setIsloading(false)
         })
-        .then(data => (
-                setFeedbackPost(data)
-        ))
+        .catch((error) => {
+            alert(error.message);
+            setIsloading(false);
+        })
     }
 
     useEffect(() => {
@@ -40,7 +48,7 @@ const AddFeedback = () => {
                         source={require('../assets/profilePic.jpeg')}
                         style={styles.profileImg}
                         />
-                        <Text style={{fontSize:20}}>Abhishek Badugu</Text>                        
+                        <Text style={{fontSize:20}}>{userLoginState.userName}</Text>                        
                     </View>
 
                     {/* Logout and Feedback Button */}
@@ -63,16 +71,22 @@ const AddFeedback = () => {
 
             {/* Add Feedback */}
 
-            <View style={styles.addFeedbackContent}>
-                <Text style={{fontSize:25, textAlign:'center', marginBottom:20}}>Add Feedback</Text>
+            
+                    <View style={styles.addFeedbackContent}>
+                        
+                        <Text style={{fontSize:25, textAlign:'center', marginBottom:20}}>Add Feedback</Text>
 
-                <View>
-                    <AddFeedbackPost feedbackPost={feedbackPost} />
-                </View>
+                        {
+                            isLoading ? (
+                                <ActivityIndicator color='black' />
+                            ) : (
 
-                
-            </View>
-
+                                <View>
+                                    <AddFeedbackPost feedbackPost={feedbackPost} />
+                                </View>
+                            )
+            }
+                    </View>
         </ScrollView>
     );
 }

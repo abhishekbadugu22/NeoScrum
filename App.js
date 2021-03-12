@@ -15,6 +15,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
+import { createDrawerNavigator } from '@react-navigation/drawer'
 
 import LoginScreen from './components/LoginScreen';
 import RegistrationScreen from './components/RegistrationScreen';
@@ -24,8 +25,7 @@ import AddFeedback from './components/AddFeedback'
 import {AuthContext} from './components/Context'
 
 import { loginReducer, initialLoginState } from './Redux/Reducer'
-
-
+// import DrawerNavigation from './components/DrawerNavigation';
 
 const App = () => {
 
@@ -33,6 +33,7 @@ const App = () => {
 
   const Tab = createBottomTabNavigator(); 
 
+  // const Drawer = createDrawerNavigator();
 
   const [loginState, dispatch] = useReducer(loginReducer,initialLoginState);
 
@@ -44,7 +45,7 @@ const App = () => {
       if(userName != '' && password != '') {
         userToken: 'abcd'
       }
-      dispatch({type: 'LOGIN', userName: userName, userToken: userToken})
+      dispatch({type: 'LOGIN', userName: userName, userToken: userToken});
     },
     SignOut: () => {
       dispatch({type: 'LOGOUT'})
@@ -60,11 +61,12 @@ const App = () => {
 
   }),[])
 
+
   return (
 
     <AuthContext.Provider value={authContext}>
 
-      <NavigationContainer >
+      <NavigationContainer  >
          
            {
              loginState.isLogin ? (
@@ -81,14 +83,15 @@ const App = () => {
               >
 
               {/* <Drawer.Navigator initialRouteName="Dashboard">
-                <Drawer.Screen name="Dashboard" component={DashBoard} />
-                <Drawer.Screen name="AddFeedback" component={AddFeedback} />
+                <Drawer.Screen name="Dashboard" children={()=><DashBoard userLoginState={loginState} />}  />
+                <Drawer.Screen name="AddFeedback" children={()=><AddFeedback userLoginState={loginState} />}/>
               </Drawer.Navigator> */}
+              {/* <DrawerNavigation /> */}
 
-              <Tab.Screen name="Dashboard" children={()=><DashBoard />} options={
+              <Tab.Screen name="Dashboard" children={()=><DashBoard userLoginState={loginState} />} options={
                 StyleSheet.create({fontSize:20})
               }></Tab.Screen>
-              <Tab.Screen name="AddFeedback" component={AddFeedback}></Tab.Screen>
+              <Tab.Screen name="AddFeedback" children={()=><AddFeedback userLoginState={loginState} />}></Tab.Screen>
                </Tab.Navigator>
               ) : (
               <Stack.Navigator  headerMode={false}>

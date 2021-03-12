@@ -1,10 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { KeyboardAvoidingView, View, Text, StyleSheet, TextInput, StatusBar, TouchableOpacity, ScrollView, Button } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import RegistrationScreen from './RegistrationScreen';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Action } from '../Redux/Action'
+
 import { AuthContext } from './Context'
 
 const LoginScreen = ({navigation}) => {
@@ -17,7 +13,14 @@ const LoginScreen = ({navigation}) => {
     const [PassError, setPassError] = useState(false);
 
 
-    const { SignIn } = useContext(AuthContext)
+    const { SignIn } = useContext(AuthContext);
+
+    /**
+     * @description Checks if the userName is Valid or not
+     * @author Abhishek Badugu
+     * @param {String} userName
+     * @returns {boolean} data is valid or not 
+     */
 
     const handleUserName = (value) => {
         if (value.trim() === '') {
@@ -58,6 +61,13 @@ const LoginScreen = ({navigation}) => {
         }
     }
 
+    /**
+     * @description Checks if the Password is Valid or not
+     * @author Abhishek Badugu
+     * @param {String} Password
+     * @returns {boolean} data is valid or not 
+     */
+
     const handlePassword = (value) => {
         const minPassLength = 5;
         const maxPassLength = 8;
@@ -93,7 +103,8 @@ const LoginScreen = ({navigation}) => {
     }
 
     const checkPassword = (password) => {
-        const passRegx = /^(?=.*\d)(?=.*[a-z]).{4,8}$/;
+        //const passRegx = /^(?=.*\d)(?=.*[a-z]).{4,8}$/;
+        const passRegx = /^[a-zA-Z0-9]*$/;
         return passRegx.test(password);    
     }
 
@@ -132,13 +143,23 @@ const LoginScreen = ({navigation}) => {
         <KeyboardAvoidingView >
 
             <View>
-            <StatusBar backgroundColor="dodgerblue" />
+            {/* <StatusBar backgroundColor="dodgerblue" /> */}
             {/* Header------- */}
          
             <View style={{margin:20, flex:1}}>
-                <View style={styles.header}>
-                    <Text style={{fontSize:40 , color:'white'}}>Login</Text>
+
+                <View style={{borderBottomColor:'black',borderBottomWidth:1,marginTop:25}}>
+                    <Text style={{fontSize:45,textAlign:'center'}}>
+                        Neo<Text style={{color:'red'}}>Scrum</Text>
+                    </Text>
                 </View>
+
+
+                <View style={styles.header}>
+                    <Text style={{fontSize:35,color:'black',marginTop:20}}>Login</Text>
+                </View>
+
+                
 
                 {/* Login Inputs */}
 
@@ -146,14 +167,12 @@ const LoginScreen = ({navigation}) => {
                     <View style={{flexDirection: 'row',justifyContent:'space-between'}}>
 
                     
-                    <Text style={{fontSize:30, color:'white'}}>Username</Text>
+                        <Text style={{fontSize:30, color:'black'}}>Username</Text>
 
-                    {/* { nameError &&
-                        <Text style={{alignSelf:'center',marginRight:10,color:'red',fontSize:15}}>{nameErrMsg}</Text>
-                    } */}
                     </View>
 
                     <TextInput
+                    elevation={8}
                     style={styles.inputStyles}
                     placeholder="Username"
                     onChangeText={val => handleUserName(val)}
@@ -167,14 +186,11 @@ const LoginScreen = ({navigation}) => {
 
                     <View style={{flexDirection: 'row',justifyContent:'space-between'}}>
 
-                        <Text style={{fontSize:30, marginTop:15,color:'white'}}>Password</Text>
-
-                    {/* {   PassError &&
-                        <Text style={{alignSelf:'center',marginRight:10,color:'red',fontSize:15, marginTop:15 }}>{passErrMsg}</Text>
-                    } */}
+                        <Text style={{fontSize:30, marginTop:15,color:'black'}}>Password</Text>
 
                     </View>
                     <TextInput
+                        elevation={8}
                         style={styles.inputStyles}
                         placeholder="Password"
                         onChangeText={val => handlePassword(val)}
@@ -190,15 +206,15 @@ const LoginScreen = ({navigation}) => {
                     <TouchableOpacity style={styles.submitButton}
                     onPress={()=>handleSubmit()}
                     >
-                        <Text style={{fontSize:20, color:'white'}}>
+                        <Text style={{fontSize:18, color:'white',textAlign:'center'}}>
                             Login
                         </Text>
                     </TouchableOpacity>
 
-                    <Text style={{fontSize:20, color:'white',textAlign:'center',marginTop:10}}>Or</Text>
+                    <Text style={{fontSize:18, color:'black',textAlign:'center',marginTop:10}}>Or</Text>
 
                     <TouchableOpacity style={styles.submitButton} onPress={() => navigation.navigate('SignUp')}>
-                        <Text style={{fontSize:20, color:'white'}}>
+                        <Text style={{fontSize:18, color:'white'}}>
                             Sign Up
                         </Text>
                     </TouchableOpacity>
@@ -217,7 +233,7 @@ const LoginScreen = ({navigation}) => {
 const styles = StyleSheet.create({
     container : {
       flex: 1,
-      backgroundColor: 'dodgerblue'
+      backgroundColor: 'white'
     },
     header : {
         flex: 0.3,
@@ -234,7 +250,7 @@ const styles = StyleSheet.create({
         padding: 10,
         fontSize:20,
         marginTop:10,
-        borderWidth: 2,
+        // borderWidth: 2,
         borderRadius: 10,
         backgroundColor: 'white',
         shadowColor:'#000',
@@ -247,9 +263,10 @@ const styles = StyleSheet.create({
     },
     submitButton : {
         marginTop:25,
-        padding: 12,
+        padding: 10,
         alignItems: 'center',
-        backgroundColor: 'purple',
+        textAlign:'center',
+        backgroundColor: '#32CD32',
         borderRadius:10,
         opacity:1
     }

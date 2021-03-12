@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
 import { KeyboardAvoidingView, View, Text, StyleSheet, TextInput, StatusBar, TouchableOpacity, ScrollView, Button, Image } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-
 import * as ImagePicker from 'react-native-image-picker'
 
 import { AuthContext } from './Context'
@@ -111,7 +108,8 @@ const RegistrationScreen = ({navigation}) => {
     }
 
     const checkPassword = (password) => {
-        const passRegx = /^(?=.*\d)(?=.*[a-z]).{4,8}$/;
+        //const passRegx = /^(?=.*\d)(?=.*[a-z]).{4,8}$/;
+        const passRegx = /^[a-zA-Z0-9]*$/;
         return passRegx.test(password);    
     }
 
@@ -158,12 +156,12 @@ const RegistrationScreen = ({navigation}) => {
 
             
 
-            <StatusBar backgroundColor="dodgerblue" />
+            {/* <StatusBar backgroundColor="dodgerblue" /> */}
             {/* Header------- */}
          
             <View style={{margin:20, flex:1}}>
                 <View style={styles.header}>
-                    <Text style={{fontSize:40 , color:'white'}}>Sign Up</Text>
+                    <Text style={{fontSize:40 , color:'black'}}>Sign Up</Text>
                 </View>
 
                 {/* Login Inputs */}
@@ -171,16 +169,24 @@ const RegistrationScreen = ({navigation}) => {
                 
                 <View style={styles.inputContainer}>
 
+                    {   photo != null ?
                         <Image 
+                        elevation={8}
                         source={{uri: photo}}
                         style={{width:100, height:100,alignSelf:'center',borderRadius:50,resizeMode:'cover'}}
-                        />
+                        /> : 
 
+                        <Image
+                        elevation={10}
+                        source={require('../assets/profilePic.jpeg')}
+                        style={{width:100, height:100,alignSelf:'center',borderRadius:50,resizeMode:'cover'}}
+                        />
+                    }
 
                     <View style={{flexDirection: 'row',justifyContent:'space-between'}}>
 
                                         
-                        <Text style={{fontSize:30, color:'white'}}>Username</Text>
+                        <Text style={{fontSize:30, color:'black'}}>Username</Text>
 
                         {/* { nameError &&
                             <Text style={{alignSelf:'center',marginRight:10,color:'red',fontSize:15}}>{nameErrMsg}</Text>
@@ -188,6 +194,7 @@ const RegistrationScreen = ({navigation}) => {
                     </View>
 
                     <TextInput
+                    elevation={8}
                     style={styles.inputStyles}
                     placeholder="Username"
                     onChangeText={val => handleUserName(val)}
@@ -201,7 +208,7 @@ const RegistrationScreen = ({navigation}) => {
 
                     <View style={{flexDirection: 'row',justifyContent:'space-between'}}>
 
-                        <Text style={{fontSize:30, marginTop:15,color:'white'}}>Password</Text>
+                        <Text style={{fontSize:30, marginTop:15,color:'black'}}>Password</Text>
 
                     {/* {   PassError &&
                         <Text style={{alignSelf:'center',marginRight:10,color:'red',fontSize:15, marginTop:15 }}>{passErrMsg}</Text>
@@ -209,6 +216,7 @@ const RegistrationScreen = ({navigation}) => {
 
                     </View>
                     <TextInput
+                        elevation={8}
                         style={styles.inputStyles}
                         placeholder="Password"
                         onChangeText={val => handlePassword(val)}
@@ -231,28 +239,30 @@ const RegistrationScreen = ({navigation}) => {
                     </TouchableOpacity>
                     {
                         photo==null ? 
-                        <Text style={{marginLeft:10,color:'red',fontSize:15}}>{imageMsg}</Text>
+                        <Text style={{textAlign:'center',color:'red',fontSize:15}}>{imageMsg}</Text>
                         : <Text></Text>
                     }
                               
 
                     <TouchableOpacity style={styles.submitButton}
                     onPress={handleRegister}
+                    elevation={8}
                     >
-                        <Text style={{fontSize:20, color:'white'}}>
+                        <Text style={{fontSize:18, color:'white'}}>
                             Sign Up
                         </Text>
                     </TouchableOpacity>
 
                     
 
-                    <TouchableOpacity style={styles.submitButton} 
+                    {/* <TouchableOpacity style={styles.submitButton} 
                         onPress={() => navigation.navigate('Login')}
-                    >
-                        <Text style={{fontSize:20, color:'white'}}>
+                    > */}
+                        <Text style={styles.havAcc}
+                        onPress={() => navigation.navigate('Login')}>
                             Already Have Account?
                         </Text>
-                    </TouchableOpacity>
+                    {/* </TouchableOpacity> */}
                     
                 </View>
                 
@@ -270,7 +280,7 @@ const RegistrationScreen = ({navigation}) => {
 const styles = StyleSheet.create({
     container : {
       flex: 1,
-      backgroundColor: 'dodgerblue'
+      backgroundColor: 'white'
     },
     header : {
         flex: 0.3,
@@ -287,29 +297,37 @@ const styles = StyleSheet.create({
         padding: 10,
         fontSize:20,
         marginTop:10,
-        borderWidth: 2,
+        // borderWidth: 2,
         borderRadius: 10,
         backgroundColor: 'white'
     },
     submitButton : {
         marginTop:25,
-        padding: 12,
+        padding: 10,
         alignItems: 'center',
-        backgroundColor: 'purple',
+        backgroundColor: '#32CD32',
         borderRadius:10,
         opacity:1
     },
     pickImage : {
         width: "50%",
-        backgroundColor: 'purple',
+        backgroundColor: '#32CD32',
         marginTop:20,
         padding:10,
-        borderRadius:10
+        borderRadius:10,
+        justifyContent:'center',
+        alignSelf:'center'
     },
     alreadyHaveAcc : {
         position:'absolute',
         bottom:10,
         right:10
+    },
+    havAcc: {
+        color:'black',
+        fontSize:19,
+        textAlign:'center',
+        marginTop:10
     }
   });
 

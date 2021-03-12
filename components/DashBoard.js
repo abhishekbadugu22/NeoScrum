@@ -1,6 +1,6 @@
 import { NavigationContainer } from '@react-navigation/native';
 import React, { useEffect, useContext, useState } from 'react';
-import { ScrollView, StyleSheet , View,Text, Image, TouchableHighlight, Button} from 'react-native';
+import { ScrollView, StyleSheet , View,Text, Image, TouchableHighlight, Button,ActivityIndicator} from 'react-native';
 
 import FeedbackPost from './FeedbackPost'
 
@@ -8,21 +8,29 @@ import  axios  from 'axios';
 
 import { AuthContext } from './Context'
 
-const DashBoard = () => {
+const DashBoard = ({ userLoginState }) => {
 
     const { SignOut } = useContext(AuthContext);
 
     const [posts, setPosts] = useState([]);
+    const [isLoading, setIsloading] = useState(false)
+
+    /**
+     * @description Fetches the Feedback using the API
+     * @author Abishek Badugu
+     * @returns {feedback Data} FeedBack Posted by others
+     */
 
     const fetchPosts = () => {
         axios.get('')
         .then((response) => {
-            return response.data
+            setPosts(response.data);
+            setIsloading(false)
         })
-        .then(data=> (
-            setPosts(data)
-        ))
-        .catch((error) => alert(error.message))
+        .catch((error) => {
+            alert(error.message);
+            setIsloading(false);
+        })
     }
 
     useEffect(() => {
@@ -69,7 +77,7 @@ const DashBoard = () => {
                         source={require('../assets/profilePic.jpeg')}
                         style={styles.profileImg}
                         />
-                        <Text style={{fontSize:20}}>Abhishek Badugu</Text>
+                        <Text style={{fontSize:20}}>{userLoginState.userName}</Text>
                             
                     </View>
 
@@ -94,16 +102,23 @@ const DashBoard = () => {
 
             </View>
 
-
-            <View style={styles.dashbaoardContent}>
-                <Text style={{fontSize:25, textAlign:'center', marginBottom:20}}>Posts</Text>
-
-                <View>
-                    <FeedbackPost feedback={feedback} />
-                </View>
-
                 
-            </View>
+
+                    <View style={styles.dashbaoardContent}>
+                        <Text style={{fontSize:25, textAlign:'center', marginBottom:20}}>Posts</Text>
+                
+                {
+                    isLoading ? (
+                        <ActivityIndicator color='black' />
+                    ) : (
+                        <View>
+                            <FeedbackPost feedback={feedback} />
+                        </View>
+                    )
+                }
+                    </View>
+            
+                
 
         </ScrollView>
     );

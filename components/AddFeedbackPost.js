@@ -5,32 +5,20 @@ import { Formik } from 'formik';
 
 const AddFeedbackPost = ({feedbackPost}) => {
 
-    // const [message, setMessage] = useState('');
 
-    // const handleFeedbackSubmit = () => {
-    //     alert(message);
-    //     setMessage('')
-    // }
+    /**
+     * @description Gives an alert message of Feedback typed by user
+     * @author Abhishek Badugu
+     * @param {String} FeedBackMessage From inputField
+     * @returns Alert Message
+     */
 
     const handleMessage = (value) => {
         alert(value.message);
+
     }
 
-    const [isLoading , setIsLoading] = useState(true)
-
-    useEffect(() => {
-        setTimeout(() => {
-            setIsLoading(false);
-        },1000)
-    },[])
-
     return (
-
-        isLoading ? (
-            <ActivityIndicator color='black'/>
-        ) :
-        (
-
         <View style={styles.container}>
                 {   
                     feedbackPost.map(item => {
@@ -45,8 +33,10 @@ const AddFeedbackPost = ({feedbackPost}) => {
 
                                     <Formik
                                     initialValues={{message:''}}
-                                    onSubmit={values=> {handleMessage(values);
-                                    } }
+                                    onSubmit={(values,{resetForm})=> {
+                                        handleMessage(values);
+                                        resetForm();    
+                                                                                                         } }
                                     >
 
                                     {({handleChange, handleBlur,handleSubmit, values}) => (
@@ -58,18 +48,14 @@ const AddFeedbackPost = ({feedbackPost}) => {
                                         onChangeText={handleChange('message')}
                                         onBlur={handleBlur('message')}
                                         value={values.message}
-                                        
                                         />
 
-                                        {/* <Button 
-                                        title="Submit Feedback"
-                                        color='purple'
-                                        onPress={handleSubmit}
-                                        /> */}
-
-                                        <TouchableOpacity style={styles.feedbackButton}>
+                                        <TouchableOpacity style={{backgroundColor: values.message == '' ? 'grey' : 'purple',justifyContent: 'center',alignSelf: 'center',padding: 8,borderRadius:20,paddingLeft:10,paddingRight:10}}
+                                        disabled={values.message=='' ? true : false}
+                                        
+                                        onPress={handleSubmit}>
                                             <Text style={{color:'white',fontSize:17}}
-                                            onPress={handleSubmit}
+                                            
                                             >
                                                 Submit Feedback
                                             </Text>
@@ -83,7 +69,6 @@ const AddFeedbackPost = ({feedbackPost}) => {
                     })
                 } 
         </View>)
-    );
 }
 
 const styles = StyleSheet.create({
@@ -132,7 +117,6 @@ const styles = StyleSheet.create({
     feedbackButton : {
         justifyContent: 'center',
         alignSelf: 'center',
-        backgroundColor: 'purple',
         padding: 8,
         borderRadius:20,
         paddingLeft:10,
