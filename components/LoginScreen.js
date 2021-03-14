@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { KeyboardAvoidingView, View, Text, StyleSheet, TextInput, StatusBar, TouchableOpacity, ScrollView, Button } from 'react-native';
 
 import { AuthContext } from './Context'
@@ -14,6 +14,28 @@ const LoginScreen = ({navigation}) => {
 
 
     const { SignIn } = useContext(AuthContext);
+
+
+    const [count, setCount] = useState(0);
+
+    useEffect(() => {
+        // Interval to update count
+        const interval = setInterval(() => {
+        setCount((count) => count + 1);
+        }, 1000);
+
+        // Subscribe for the focus Listener
+        const unsubscribe = navigation.addListener('focus', () => {
+        setCount(0);
+        });
+
+        return () => {
+        // Clear setInterval in case of screen unmount
+        clearTimeout(interval);
+        // Unsubscribe for the focus Listener
+        unsubscribe;
+        };
+    }, [navigation]);
 
     /**
      * @description Checks if the userName is Valid or not

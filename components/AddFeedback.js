@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useContext } from 'react';
 import { ScrollView, StyleSheet , View,Text, Image, TouchableHighlight, Button, ActivityIndicator} from 'react-native';
+import { createDrawerNavigator } from '@react-navigation/drawer'
 
 import  axios  from 'axios';
 
 import AddFeedbackPost from './AddFeedbackPost';
 
-import { AuthContext } from './Context'
+import { AuthContext } from './Context';
+import Header from './Header';
 
-const AddFeedback = ({ userLoginState }) => {
+const Drawer = createDrawerNavigator();
+
+const AddFeedback = (props) => {
 
     const { SignOut } = useContext(AuthContext);
     const [feedbackPost, setFeedbackPost] = useState([]);
@@ -38,55 +42,30 @@ const AddFeedback = ({ userLoginState }) => {
 
     return (
         <ScrollView style={styles.container}>
-            <View style={styles.header} elevation={10}>
-                <View style={{margin:10 , justifyContent:'space-between', flexDirection:'row'}}>
+          
+          {/* Add Feedback Header */}
 
-                    {/* ProfileImage and User Name */}
-
-                    <View style={styles.headerLeft}>
-                        <Image 
-                        source={require('../assets/profilePic.jpeg')}
-                        style={styles.profileImg}
-                        />
-                        <Text style={{fontSize:20}}>{userLoginState.userName}</Text>                        
-                    </View>
-
-                    {/* Logout and Feedback Button */}
-
-                    <View style={styles.headerRight}>
-                        {/* <TouchableHighlight 
-                        style={styles.logoutButton}
-                        onPress={() => SignOut()}
-                        >
-                            <Text style={{fontSize:16, color:'white'}}>Logout</Text>
-                        </TouchableHighlight> */}
-                        <Button 
-                        title="Logout"
-                        color="tomato"
-                        onPress={() => SignOut()}
-                        />
-                    </View>
-                </View>
-            </View>
+            <Header {...props}/>
 
             {/* Add Feedback */}
 
             
-                    <View style={styles.addFeedbackContent}>
+            <View style={styles.addFeedbackContent}>
                         
-                        <Text style={{fontSize:25, textAlign:'center', marginBottom:20}}>Add Feedback</Text>
+                <Text style={{fontSize:25, textAlign:'center', marginBottom:20}}>Add Feedback</Text>
 
-                        {
-                            isLoading ? (
-                                <ActivityIndicator color='black' />
-                            ) : (
+                    {
+                        isLoading ? (
+                            <ActivityIndicator color='black' />
+                        ) : (
 
-                                <View>
-                                    <AddFeedbackPost feedbackPost={feedbackPost} />
-                                </View>
-                            )
-            }
-                    </View>
+                            <View>
+                                <AddFeedbackPost feedbackPost={feedbackPost} />
+                            </View>
+                        )
+                    }
+
+            </View>
         </ScrollView>
     );
 }
@@ -95,49 +74,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white'
-    },
-    //Header
-    header: {
-        width:"100%",
-        height:100,
-        backgroundColor: 'white',
-        justifyContent:'center',
-        borderColor:'black',
-        shadowColor: "#000000",
-        shadowOpacity: 0.8,
-        shadowRadius: 2,
-        shadowOffset: {
-        height: 1,
-        width: 1
-        }
-    },
-    profileImg : {
-        width: 60,
-        height: 60,
-        resizeMode: 'cover',
-        borderRadius: 50,
-        marginRight: 8
-
-    },
-    headerLeft : {
-        flexDirection: 'row',
-        alignItems:'center',
-        maxWidth:'30%'
-    },
-    headerRight: {
-        flexDirection: 'row',
-        alignItems:'center'
-    },
-    feedbackButton : {
-        backgroundColor: 'dodgerblue',
-        padding: 8,
-        marginRight:10,
-        borderRadius:10
-    },
-    logoutButton : {
-        backgroundColor: 'red',
-        padding: 8,
-        borderRadius: 10,
     },
     // Add Feedback content
     addFeedbackContent: {

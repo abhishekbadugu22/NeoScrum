@@ -1,39 +1,29 @@
 
 
-import React, { useState, useReducer, useMemo , useEffect} from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
+import React, { useReducer, useMemo , useEffect} from 'react';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { createDrawerNavigator } from '@react-navigation/drawer'
 
 import LoginScreen from './components/LoginScreen';
 import RegistrationScreen from './components/RegistrationScreen';
-import DashBoard from './components/DashBoard';
-import AddFeedback from './components/AddFeedback'
 
 import {AuthContext} from './components/Context'
 
+import MainNavigator from './components/MainNavigator'
+
 import { loginReducer, initialLoginState } from './Redux/Reducer'
-// import DrawerNavigation from './components/DrawerNavigation';
+import { Button } from 'react-native';
+
+import 'react-native-gesture-handler';
 
 const App = () => {
 
   const Stack = createStackNavigator();
 
-  const Tab = createBottomTabNavigator(); 
-
-  // const Drawer = createDrawerNavigator();
+  const Drawer = createDrawerNavigator();
 
   const [loginState, dispatch] = useReducer(loginReducer,initialLoginState);
 
@@ -57,8 +47,10 @@ const App = () => {
         userToken: 'abcd'
       }
       dispatch({type: 'REGISTER', userName: userName, userToken: userToken})
-    }
-
+    },
+    // getUser : () => {
+    //   return loginState
+    // }
   }),[])
 
 
@@ -66,52 +58,34 @@ const App = () => {
 
     <AuthContext.Provider value={authContext}>
 
-      <NavigationContainer  >
+      <NavigationContainer >
          
            {
-             loginState.isLogin ? (
-              <Tab.Navigator 
-              tabBarOptions={{
-                style:{
-                  paddingBottom:27,
-                  height: 75
-                },
-                labelStyle: {
-                  fontSize:18
-                }
-              } }
-              >
+              loginState.isLogin ? (
+              
+                <Drawer.Navigator>
+                   {/* drawerContent={()=><Button title="Logout" onPress={() => authContext.SignOut()} />} */}
 
-              {/* <Drawer.Navigator initialRouteName="Dashboard">
-                <Drawer.Screen name="Dashboard" children={()=><DashBoard userLoginState={loginState} />}  />
-                <Drawer.Screen name="AddFeedback" children={()=><AddFeedback userLoginState={loginState} />}/>
-              </Drawer.Navigator> */}
-              {/* <DrawerNavigation /> */}
+                  <Drawer.Screen name='Home' children={() => <MainNavigator userLoginState={loginState} />}>
+                  </Drawer.Screen>
 
-              <Tab.Screen name="Dashboard" children={()=><DashBoard userLoginState={loginState} />} options={
-                StyleSheet.create({fontSize:20})
-              }></Tab.Screen>
-              <Tab.Screen name="AddFeedback" children={()=><AddFeedback userLoginState={loginState} />}></Tab.Screen>
-               </Tab.Navigator>
-              ) : (
-              <Stack.Navigator  headerMode={false}>
-                <Stack.Screen name="Login" component={LoginScreen} ></Stack.Screen>
-                <Stack.Screen name="SignUp" component={RegistrationScreen}></Stack.Screen>
-              </Stack.Navigator>
-             )
-           }
+                </Drawer.Navigator>
 
-          
+              ) :
+              (
+                <Stack.Navigator  headerMode={false} initialRouteName='Login'>
 
-        
-        
-        {/* <Tab.Navigator>
-          <Tab.Screen name="Login" component={LoginScreen} ></Tab.Screen>
-          <Tab.Screen name="SignUp" component={RegistrationScreen}></Tab.Screen>
-          <Tab.Screen name="Dashboard" component={DashBoard}></Tab.Screen>
-          <Tab.Screen name="AddFeedback" component={AddFeedback}></Tab.Screen>
-        </Tab.Navigator> */}
-        
+                  <Stack.Screen name="Login" component={LoginScreen} 
+                  options ={{
+                    animationTypeForReplace: !loginState.isLogin ? 'pop' : 'push',
+                  }}
+                  ></Stack.Screen>
+
+                  <Stack.Screen name="SignUp" component={RegistrationScreen}></Stack.Screen>
+
+                </Stack.Navigator>
+              )
+            }
        
      </NavigationContainer> 
 
@@ -119,14 +93,5 @@ const App = () => {
       
   );
 };
-
-const styles = StyleSheet.create({
-  container : {
-    flex: 1,
-  },
-  tabStyles : {
-    fontSize: 20
-  }
-});
 
 export default App;

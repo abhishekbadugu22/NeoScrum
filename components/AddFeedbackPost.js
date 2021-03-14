@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { View,Text, Image , StyleSheet, TextInput, Button, TouchableOpacity, ActivityIndicator} from 'react-native';
+import React from 'react';
+import { View,Text, Image , StyleSheet, TextInput, Button, TouchableOpacity} from 'react-native';
 
 import { Formik } from 'formik';
 
@@ -33,10 +33,11 @@ const AddFeedbackPost = ({feedbackPost}) => {
 
                                     <Formik
                                     initialValues={{message:''}}
-                                    onSubmit={(values,{resetForm})=> {
+                                    onSubmit={(values,{resetForm}) => {
                                         handleMessage(values);
                                         resetForm();    
-                                                                                                         } }
+                                        } 
+                                    }
                                     >
 
                                     {({handleChange, handleBlur,handleSubmit, values}) => (

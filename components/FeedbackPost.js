@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View, StyleSheet, ActivityIndicator } from 'react-native';
-import DashBoard from './DashBoard'
 
 const FeedbackPost = (props) => {
 
