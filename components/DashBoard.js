@@ -72,7 +72,7 @@ const DashBoard = (props) => {
 
             <View style={styles.dashbaoardContent}>
 
-                <Text style={{fontSize:25, textAlign:'center', marginBottom:20}}>Posts</Text>
+                <Text style={{fontSize:25, textAlign:'center', marginBottom:20}}>Feedbacks</Text>
                 
                 {
                     isLoading ? (

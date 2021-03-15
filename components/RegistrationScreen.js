@@ -109,7 +109,8 @@ const RegistrationScreen = ({navigation}) => {
 
     const checkPassword = (password) => {
         //const passRegx = /^(?=.*\d)(?=.*[a-z]).{4,8}$/;
-        const passRegx = /^[a-zA-Z0-9]*$/;
+        //const passRegx = /^[a-zA-Z0-9]*$/;
+        const passRegx = /^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/;
         return passRegx.test(password);    
     }
 
@@ -117,7 +118,7 @@ const RegistrationScreen = ({navigation}) => {
         if(!(nameError || PassError) && (password != null) && (userName != null) && photo != null){
             // console.log(password);
             // console.log(userName);
-            SignUp(userName,password)
+            SignUp(userName,password,photo)
             // navigation.push('Dashboard',photo)
         }else {
             if(nameError || userName == null) {
@@ -186,7 +187,7 @@ const RegistrationScreen = ({navigation}) => {
                     <View style={{flexDirection: 'row',justifyContent:'space-between'}}>
 
                                         
-                        <Text style={{fontSize:30, color:'black'}}>Username</Text>
+                        <Text style={{fontSize:25, color:'black'}}>Username</Text>
 
                         {/* { nameError &&
                             <Text style={{alignSelf:'center',marginRight:10,color:'red',fontSize:15}}>{nameErrMsg}</Text>
@@ -208,7 +209,7 @@ const RegistrationScreen = ({navigation}) => {
 
                     <View style={{flexDirection: 'row',justifyContent:'space-between'}}>
 
-                        <Text style={{fontSize:30, marginTop:15,color:'black'}}>Password</Text>
+                        <Text style={{fontSize:25, marginTop:15,color:'black'}}>Password</Text>
 
                     {/* {   PassError &&
                         <Text style={{alignSelf:'center',marginRight:10,color:'red',fontSize:15, marginTop:15 }}>{passErrMsg}</Text>
@@ -258,9 +259,8 @@ const RegistrationScreen = ({navigation}) => {
                     {/* <TouchableOpacity style={styles.submitButton} 
                         onPress={() => navigation.navigate('Login')}
                     > */}
-                        <Text style={styles.havAcc}
-                        onPress={() => navigation.navigate('Login')}>
-                            Already Have Account?
+                        <Text style={styles.havAcc}>
+                            Already Have Account?<Text style={{color:'dodgerblue'}} onPress={() => navigation.navigate('Login')}> Sign In</Text>
                         </Text>
                     {/* </TouchableOpacity> */}
                     
@@ -290,7 +290,7 @@ const styles = StyleSheet.create({
     inputContainer : {
         flex: 0.7,
         width: "100%",
-        marginTop: 40
+        marginTop: 30
     },
     inputStyles : {
         borderColor: 'grey',
@@ -305,13 +305,15 @@ const styles = StyleSheet.create({
         marginTop:25,
         padding: 10,
         alignItems: 'center',
-        backgroundColor: '#32CD32',
+        backgroundColor: '#16161d',
+        //backgroundColor: '#32CD32',
         borderRadius:10,
         opacity:1
     },
     pickImage : {
         width: "50%",
-        backgroundColor: '#32CD32',
+        backgroundColor: '#16161d',
+        //backgroundColor: '#32CD32',
         marginTop:20,
         padding:10,
         borderRadius:10,

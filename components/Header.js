@@ -1,12 +1,16 @@
 import React, { useContext } from 'react';
 
-import { StyleSheet , View,Text, Image, Button} from 'react-native';
+import { StyleSheet , View,Text, Image, Button, TouchableHighlight} from 'react-native';
+
+import { useNavigation } from '@react-navigation/native';
 
 import { AuthContext } from './Context';
 
 const Header =  (props) => {
 
     const { SignOut } = useContext(AuthContext);
+
+    const navigation = useNavigation();
 
     return (
         <View style={styles.header} elevation={10}>
@@ -15,22 +19,34 @@ const Header =  (props) => {
                     {/* ProfileImage and User Name */}
 
                     <View style={styles.headerLeft}>
-                        <Image 
-                        source={require('../assets/profilePic.jpeg')}
-                        style={styles.profileImg}
-                        />
-                        <Text style={{fontSize:20}}>{props.userLoginState.userName}</Text>                        
+
+                        {
+                            props.userLoginState.profileImage ? (
+                                <Image 
+                                source={{uri: props.userLoginState.profileImage}}
+                                style={styles.profileImg}
+                                />
+                            ) : (
+                                <Image 
+                                source={require('../assets/profilePic.jpeg')}
+                                style={styles.profileImg}
+                                />
+                            )
+                        }
+
+                        <Text style={{fontSize:25}}>{props.userLoginState.userName}</Text>                        
                     </View>
 
                     {/* Logout and Feedback Button */}
 
-                    <View style={styles.headerRight}>
-                        <Button 
-                        title="Logout"
-                        color="tomato"
-                        onPress={() => SignOut()}
-                        />
-                    </View>
+                    <TouchableHighlight
+                    style={styles.menuButton}
+                    onPress={() => navigation.openDrawer()}
+                    >
+
+                        <Text style={{fontSize:20,color:'white'}}>Menu</Text>
+
+                    </TouchableHighlight>
                 </View>
             </View>
     );
@@ -42,7 +58,7 @@ const styles = StyleSheet.create({
         width:"100%",
         height:100,
         backgroundColor: 'white',
-        justifyContent:'center',
+        justifyContent:'space-around',
         borderColor:'black',
         shadowColor: "#000000",
         shadowOpacity: 0.8,
@@ -67,7 +83,7 @@ const styles = StyleSheet.create({
     },
     headerRight: {
         flexDirection: 'row',
-        alignItems:'center'
+        alignItems:'center',
     },
     feedbackButton : {
         backgroundColor: 'dodgerblue',
@@ -75,10 +91,13 @@ const styles = StyleSheet.create({
         marginRight:10,
         borderRadius:10
     },
-    logoutButton : {
-        backgroundColor: 'red',
+    menuButton : {
+        backgroundColor: 'dodgerblue',
         padding: 8,
         borderRadius: 10,
+        height:40,
+        justifyContent:'center',
+        alignSelf:'center'
     },
 })
 

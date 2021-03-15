@@ -15,28 +15,6 @@ const LoginScreen = ({navigation}) => {
 
     const { SignIn } = useContext(AuthContext);
 
-
-    const [count, setCount] = useState(0);
-
-    useEffect(() => {
-        // Interval to update count
-        const interval = setInterval(() => {
-        setCount((count) => count + 1);
-        }, 1000);
-
-        // Subscribe for the focus Listener
-        const unsubscribe = navigation.addListener('focus', () => {
-        setCount(0);
-        });
-
-        return () => {
-        // Clear setInterval in case of screen unmount
-        clearTimeout(interval);
-        // Unsubscribe for the focus Listener
-        unsubscribe;
-        };
-    }, [navigation]);
-
     /**
      * @description Checks if the userName is Valid or not
      * @author Abhishek Badugu
@@ -126,7 +104,9 @@ const LoginScreen = ({navigation}) => {
 
     const checkPassword = (password) => {
         //const passRegx = /^(?=.*\d)(?=.*[a-z]).{4,8}$/;
-        const passRegx = /^[a-zA-Z0-9]*$/;
+        //const passRegx = /^[a-zA-Z0-9]$/;
+        //const passRegx = /^[\w'\-,.][^!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;.,-:[\]]{2,}$/;
+        const passRegx = /^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/;
         return passRegx.test(password);    
     }
 
@@ -189,7 +169,7 @@ const LoginScreen = ({navigation}) => {
                     <View style={{flexDirection: 'row',justifyContent:'space-between'}}>
 
                     
-                        <Text style={{fontSize:30, color:'black'}}>Username</Text>
+                        <Text style={{fontSize:25, color:'black'}}>Username</Text>
 
                     </View>
 
@@ -208,7 +188,7 @@ const LoginScreen = ({navigation}) => {
 
                     <View style={{flexDirection: 'row',justifyContent:'space-between'}}>
 
-                        <Text style={{fontSize:30, marginTop:15,color:'black'}}>Password</Text>
+                        <Text style={{fontSize:25, marginTop:15,color:'black'}}>Password</Text>
 
                     </View>
                     <TextInput
@@ -288,7 +268,8 @@ const styles = StyleSheet.create({
         padding: 10,
         alignItems: 'center',
         textAlign:'center',
-        backgroundColor: '#32CD32',
+        backgroundColor: '#16161d',
+        //backgroundColor: '#32CD32',
         borderRadius:10,
         opacity:1
     }

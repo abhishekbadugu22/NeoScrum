@@ -14,7 +14,7 @@ const AddFeedbackPost = ({feedbackPost}) => {
      */
 
     const handleMessage = (value) => {
-        alert(value.message);
+        alert(value.message.trim());
 
     }
 
@@ -49,14 +49,19 @@ const AddFeedbackPost = ({feedbackPost}) => {
                                         onChangeText={handleChange('message')}
                                         onBlur={handleBlur('message')}
                                         value={values.message}
+                                        numberOfLines={3} 
+                                        maxLength={100} 
+                                        multiline={true}
                                         />
 
-                                        <TouchableOpacity style={{backgroundColor: values.message == '' ? 'grey' : 'purple',justifyContent: 'center',alignSelf: 'center',padding: 8,borderRadius:20,paddingLeft:10,paddingRight:10}}
-                                        disabled={values.message=='' ? true : false}
+                                        <Text style={{textAlign:'center', marginBottom:10}}>{values.message.trim().length}/100 Characters</Text>
+
+                                        <TouchableOpacity style={{backgroundColor: values.message.trim() == '' ? 'grey' : 'purple',justifyContent: 'center',alignSelf: 'center',padding: 8,borderRadius:20,paddingLeft:10,paddingRight:10}}
+                                        disabled={values.message.trim()=='' ? true : false}
                                         
                                         onPress={handleSubmit}>
-                                            <Text style={{color:'white',fontSize:17}}
-                                            
+                                            <Text 
+                                            style={{color:'white',fontSize:17}}
                                             >
                                                 Submit Feedback
                                             </Text>
@@ -83,7 +88,7 @@ const styles = StyleSheet.create({
     },
     addFeedbackContainer: {
         width: '100%',
-        height: 300,
+        height: 360,
         alignItems:'center',
         backgroundColor: 'white',
         marginTop:10,
@@ -96,7 +101,8 @@ const styles = StyleSheet.create({
         shadowOffset: {
         height: 1,
         width: 1
-        }
+        },
+        borderRadius:30
     },
     inputStyles : {
         padding: 10,

@@ -17,9 +17,18 @@ import MainNavigator from './components/MainNavigator'
 import { loginReducer, initialLoginState } from './Redux/Reducer'
 import { Button } from 'react-native';
 
+import DrawerContent from './components/DrawerContent';
+
 import 'react-native-gesture-handler';
 
+import { useNavigation } from '@react-navigation/native';
+
+import AsyncStorage from '@react-native-async-storage/async-storage'
+
+
 const App = () => {
+
+  // const navigation = useNavigation();
 
   const Stack = createStackNavigator();
 
@@ -29,29 +38,85 @@ const App = () => {
 
   const authContext = useMemo(() => ({
 
-    SignIn: (userName, password) => {
-      let userToken;
-      userToken=null
+    SignIn: async(userName, password) => {
+      let userToken ;
+      userToken=null;
+      // let userData;
+      // userData = null;
       if(userName != '' && password != '') {
-        userToken: 'abcd'
+
+        try {
+          
+          userToken='abc';
+          await AsyncStorage.setItem('userToken',userToken);
+          await AsyncStorage.setItem('userName',userName);
+        }
+        catch (error) {
+          alert(error.message)
+        }
+        
       }
       dispatch({type: 'LOGIN', userName: userName, userToken: userToken});
     },
-    SignOut: () => {
+    SignOut: async () => {
+      try {
+        await AsyncStorage.removeItem('userToken');
+        await AsyncStorage.removeItem('userName');
+        await AsyncStorage.removeItem('profileImage');
+        }
+        catch (error) {
+          alert(error.message)
+        }
       dispatch({type: 'LOGOUT'})
     },
-    SignUp: (userName, password) => {
+    SignUp: async(userName, password, profileImage) => {
       let userToken;
       userToken=null
-      if(userName != '' && password != '') {
-        userToken: 'abcd'
+      if(userName != '' && password != '' && profileImage != null) {
+        try {
+          
+          userToken='abc';
+          await AsyncStorage.setItem('userToken',userToken);
+          await AsyncStorage.setItem('userName',userName);
+          await AsyncStorage.setItem('profileImage',profileImage)
+        }
+        catch (error) {
+          alert(error.message)
+        }
+        
       }
-      dispatch({type: 'REGISTER', userName: userName, userToken: userToken})
+      dispatch({type: 'REGISTER', userName: userName, userToken: userToken, profileImage: profileImage})
     },
     // getUser : () => {
     //   return loginState
     // }
-  }),[])
+  }),[]);
+
+  const getData = async () => {
+    let userToken;
+      userToken = null;
+      let userName;
+      userName = null;
+      let profileImage;
+      profileImage = null;
+      try {
+        userToken = await AsyncStorage.getItem('userToken');
+        userName = await AsyncStorage.getItem('userName');
+        profileImage = await AsyncStorage.getItem('profileImage')
+      } catch (error) {
+        alert(error.message)
+      }
+      if(userToken!=null)
+        dispatch({type: 'RETRIVE_TOKEN', userToken:userToken, userName:userName, profileImage: profileImage}) 
+  }
+
+
+  useEffect(() => {
+    // setTimeout(() => {
+    //   getData();
+    // })
+    getData()
+  },[])
 
 
   return (
@@ -63,9 +128,7 @@ const App = () => {
            {
               loginState.isLogin ? (
               
-                <Drawer.Navigator>
-                   {/* drawerContent={()=><Button title="Logout" onPress={() => authContext.SignOut()} />} */}
-
+                <Drawer.Navigator drawerContent={props => <DrawerContent userLoginState={loginState} navProps={props}/>}>
                   <Drawer.Screen name='Home' children={() => <MainNavigator userLoginState={loginState} />}>
                   </Drawer.Screen>
 
@@ -73,15 +136,17 @@ const App = () => {
 
               ) :
               (
-                <Stack.Navigator  headerMode={false} initialRouteName='Login'>
+                <Stack.Navigator>
 
-                  <Stack.Screen name="Login" component={LoginScreen} 
-                  options ={{
-                    animationTypeForReplace: !loginState.isLogin ? 'pop' : 'push',
+                  <Stack.Screen name="Login" component={LoginScreen}
+                  options={{
+                    headerShown:false
                   }}
-                  ></Stack.Screen>
+                  >
 
-                  <Stack.Screen name="SignUp" component={RegistrationScreen}></Stack.Screen>
+                  </Stack.Screen>
+
+                  <Stack.Screen name="SignUp" component={RegistrationScreen} options={{title:'Back'}}></Stack.Screen>
 
                 </Stack.Navigator>
               )
