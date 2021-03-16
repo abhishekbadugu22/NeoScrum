@@ -6,9 +6,12 @@ import { AuthContext } from './Context'
 const LoginScreen = ({navigation}) => {
 
     const [userName, setUserName] = useState(null);
+    const [email, setEmail] = useState(null);
     const [password, setPassword] = useState(null);
+    const [emailMsg, setEmailMsg] = useState(null);
     const [nameErrMsg, setNameErrMsg] = useState(null);
     const [passErrMsg, setPassErrMsg] = useState(null);
+    const [emailError, setEmailError] = useState(false);
     const [nameError, setNameError] = useState(false);
     const [PassError, setPassError] = useState(false);
 
@@ -22,6 +25,35 @@ const LoginScreen = ({navigation}) => {
      * @returns {boolean} data is valid or not 
      */
 
+
+    const handleEmail = (value) => {
+
+        if (value.trim() === '') {
+            setEmailMsg('Enter E-mail');
+            setEmailError(true);
+            setEmail(value.trim());
+            return false;
+        }
+        else if (!checkEmail(value.trim())) {
+            setEmailMsg('Invalid E-mail!!');
+            setEmailError(true);
+            setEmail(value.trim());
+            return false;
+        }
+        else {
+            setEmailError(false);
+            setEmail(value.trim())
+            return true;
+        }
+    } 
+
+    function checkEmail(email) {
+        const regx = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return regx.test(email);
+    }
+    
+
+
     const handleUserName = (value) => {
         if (value.trim() === '') {
             setNameErrMsg('Enter First Name');
@@ -29,25 +61,25 @@ const LoginScreen = ({navigation}) => {
             setUserName(value)
             return false;
         }
-        else if (value.length < 3 || value.length > 12) {
+        else if (value.trim().length < 3 || value.trim().length > 12) {
             setNameErrMsg('Length 3 to 12 only');
             setNameError(true);
             setUserName(value)
             return false;
         }
-        else if (!isNaN(value)) {
+        else if (!isNaN(value.trim())) {
             setNameErrMsg('cannot enter numbers');
             setNameError(true);
             setUserName(value)
             return false;
         }
-        else if (!isNameValid(value)) {
+        else if (!isNameValid(value.trim())) {
             setNameErrMsg('Invalid First Name');
             setNameError(true);
             setUserName(value)
             return false;
         }
-        else if ((value.split(' ')).length > 1) {
+        else if ((value.trim().split(' ')).length > 1) {
             setNameErrMsg('Cannot Contain Spaces in between');
             setNameError(true);
             setUserName(value)
@@ -56,7 +88,7 @@ const LoginScreen = ({navigation}) => {
         else {
             //setNameErrMsg('Valid Name','#firstmsg');
             setNameError(false);
-            setUserName(value)
+            setUserName(value.trim())
             return value;
         }
     }
@@ -115,7 +147,7 @@ const LoginScreen = ({navigation}) => {
             SignIn(userName,password)
             // navigation.navigate('Dashboard')
         }else {
-            if(nameError || userName == null) {
+            if(nameError || email == null) {
                 setNameErrMsg('Name Required');
                 setNameError(true);
             }

@@ -27,12 +27,15 @@ const AddFeedback = (props) => {
         axios.get('https://jsonplaceholder.typicode.com/users')
         .then((response) => {
             setFeedbackPost(response.data)
-            setIsloading(false)
+            //setIsloading(false)
         })
         .catch((error) => {
             alert(error.message);
-            setIsloading(false);
+            //setIsloading(false);
         })
+        .finally(() =>
+            setIsloading(false)
+        )
     }
 
     useEffect(() => {
@@ -41,7 +44,7 @@ const AddFeedback = (props) => {
     
 
     return (
-        <ScrollView style={styles.container}>
+        <ScrollView style={styles.container} stickyHeaderIndices={[0]}>
           
           {/* Add Feedback Header */}
 
@@ -80,6 +83,7 @@ const styles = StyleSheet.create({
         flex: 1,
         margin:15,
         marginTop:25,
+        zIndex:-1
     }
 })
 

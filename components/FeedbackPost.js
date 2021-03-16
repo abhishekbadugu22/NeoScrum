@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View, StyleSheet, ActivityIndicator } from 'react-native';
 
+import moment from 'moment'
+
 const FeedbackPost = (props) => {
 
     const [isLoading , setIsLoading] = useState(true)
@@ -15,9 +17,7 @@ const FeedbackPost = (props) => {
 
         isLoading ? (
             <ActivityIndicator color='black'/>
-        ) :
-        (
-
+        ) : (
 
         <View style={styles.container}>
             {
@@ -29,11 +29,15 @@ const FeedbackPost = (props) => {
                             
                             <View style={styles.postHeader}>
                                 <Text style={{fontSize:23, color:'white'}}>Feedback</Text>
-                                <Text style={{color:'white',fontSize:16}}>added 6hrs ago</Text>
+                                <Text style={{color:'white',fontSize:16}}>{ moment().startOf('month').fromNow() }</Text>
                             </View>
                             
                             <View style={styles.feedbackText}>
                                 <Text style={{fontSize:18,}} >{item.comment}</Text>
+                            </View>
+
+                            <View style={styles.bottomText}>
+                                <Text>Posted On: 15th March</Text>
                             </View>
                         
                         </View>
@@ -64,7 +68,8 @@ const styles = StyleSheet.create({
         height: 1,
         width: 1
         },
-        borderRadius:20
+        borderRadius:20,
+        
     },
     postHeader : {
         padding:10,
@@ -74,11 +79,17 @@ const styles = StyleSheet.create({
         justifyContent:'space-between',
         alignItems:'center',
         borderTopLeftRadius: 20,
-        borderTopRightRadius:20
+        borderTopRightRadius:20,
+        flex:0.3
     },
     feedbackText : {
         padding:10,
-        margin: 10
+        margin: 10,
+        flex:0.6
+    },
+    bottomText : {
+        alignSelf:'flex-end',
+        marginRight: 10
     }
 })
 

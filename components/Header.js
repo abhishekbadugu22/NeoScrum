@@ -6,6 +6,8 @@ import { useNavigation } from '@react-navigation/native';
 
 import { AuthContext } from './Context';
 
+import Icon from 'react-native-vector-icons/Ionicons';
+
 const Header =  (props) => {
 
     const { SignOut } = useContext(AuthContext);
@@ -37,16 +39,18 @@ const Header =  (props) => {
                         <Text style={{fontSize:25}}>{props.userLoginState.userName}</Text>                        
                     </View>
 
+                    {/* <Icon.Button name="menu" size={25}></Icon.Button> */}
+
                     {/* Logout and Feedback Button */}
 
-                    <TouchableHighlight
+                    {/* <TouchableHighlight
                     style={styles.menuButton}
                     onPress={() => navigation.openDrawer()}
-                    >
+                    > */}
 
-                        <Text style={{fontSize:20,color:'white'}}>Menu</Text>
-
-                    </TouchableHighlight>
+                        {/* <Text style={{fontSize:20,color:'white'}}>Menu</Text> */}
+                        <Icon name="menu" style={styles.menuButton} size={35} onPress={() => navigation.openDrawer()}></Icon>
+                    {/* </TouchableHighlight> */}
                 </View>
             </View>
     );
@@ -66,7 +70,8 @@ const styles = StyleSheet.create({
         shadowOffset: {
         height: 1,
         width: 1
-        }
+        },
+        //zIndex: 100
     },
     profileImg : {
         width: 60,
@@ -92,12 +97,17 @@ const styles = StyleSheet.create({
         borderRadius:10
     },
     menuButton : {
-        backgroundColor: 'dodgerblue',
-        padding: 8,
-        borderRadius: 10,
-        height:40,
+        // backgroundColor: 'dodgerblue',
+        //padding: 8,
+        marginRight:8,
+        borderRadius: 30,
+        //  height:40,
         justifyContent:'center',
-        alignSelf:'center'
+        alignSelf:'center',
+        color:'dodgerblue',
+        //width:50,
+        alignItems:'center',
+        textAlign:'center'
     },
 })
 

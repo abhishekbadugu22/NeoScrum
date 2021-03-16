@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     },
     addFeedbackContainer: {
         width: '100%',
-        height: 360,
+        minHeight: 360,
         alignItems:'center',
         backgroundColor: 'white',
         marginTop:10,
@@ -107,19 +107,20 @@ const styles = StyleSheet.create({
     inputStyles : {
         padding: 10,
         width: '100%',
-        borderColor: 'black',
-        borderWidth:1.5,
+        //borderColor: 'black',
+        //borderWidth:1.5,
         marginTop: 20,
         shadowColor: "#000000",
         backgroundColor: 'white',
         shadowOpacity: 0.8,
         shadowRadius: 2,
-        shadowOffset: {
-        height: 1,
-        width: 1
-        },
+        // shadowOffset: {
+        // height: 1,
+        // width: 1
+        // },
         marginBottom:20,
-        fontSize:16
+        fontSize:16,
+        borderRadius:20
     },
     feedbackButton : {
         justifyContent: 'center',

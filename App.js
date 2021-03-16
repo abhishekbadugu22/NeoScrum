@@ -92,7 +92,7 @@ const App = () => {
     // }
   }),[]);
 
-  const getData = async () => {
+  async function getData() {
     let userToken;
       userToken = null;
       let userName;
@@ -109,7 +109,6 @@ const App = () => {
       if(userToken!=null)
         dispatch({type: 'RETRIVE_TOKEN', userToken:userToken, userName:userName, profileImage: profileImage}) 
   }
-
 
   useEffect(() => {
     // setTimeout(() => {

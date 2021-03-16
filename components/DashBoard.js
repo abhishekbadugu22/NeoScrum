@@ -64,7 +64,7 @@ const DashBoard = (props) => {
     ]
 
     return (
-        <ScrollView style={styles.container}>
+        <ScrollView style={styles.container} stickyHeaderIndices={[0]}>
 
             {/* Dashboard Header */}
 
@@ -99,6 +99,7 @@ const styles = StyleSheet.create({
         flex: 1,
         margin:15,
         marginTop:25,
+        zIndex: -1
     }
 })
 
